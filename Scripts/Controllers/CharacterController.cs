@@ -36,8 +36,8 @@ public class CharacterController : MonoBehaviour, IMovable
         right.Normalize();
 
         Vector3 moveDirection =  forward * direction.y + right * direction.x;
-        Debug.Log(moveDirection);
         rb.velocity = moveDirection.normalized * speed + new Vector3(0, rb.velocity.y, 0);
+        Debug.Log(moveDirection);
     }
 
     public void Rotate(Vector3 direction)
@@ -51,8 +51,6 @@ public class CharacterController : MonoBehaviour, IMovable
 
         //cameraTransform.localRotation = Quaternion.Euler(yRotation, 0f, 0f);
         transform.Rotate(Vector3.up * mouseX);
-        
-        Debug.Log(mouseX + "  " + mouseY);
     }
 
     public void Shoot()

@@ -34,7 +34,7 @@ public class InputController : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayerDead?.Invoke();
+        gameInput.Keyboard.Shot.performed -= Shoot;
         //gameInput.Keyboard.Shoot.performed -= Shoot;
         //gameInput.Keyboard.TouchPress.performed -= OnTouchPressStarted;
     }
@@ -81,11 +81,7 @@ public class InputController : MonoBehaviour
 
     private void Shoot(InputAction.CallbackContext obj)
     {
-        if(delay <= 0)
-        {
-            _characterController.Shoot();
-            delay = 0.75f;
-        }
+        _animatotionController.Shoot();
     }
 
     public void FakeDestroy()

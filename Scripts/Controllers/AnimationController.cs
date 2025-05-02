@@ -1,17 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationController : MonoBehaviour
 {
-    private Animator _animator;
-
-    void Start()
-    {
-        _animator = GetComponent<Animator>();
-    }
+    [SerializeField] private Animator animator;
 
     public void Shoot()
     {
-        _animator.Play("PistolShoot");
+        animator.Play("PistolShoot");
     }
 }
