@@ -44,6 +44,15 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Shot"",
+                    ""type"": ""Button"",
+                    ""id"": ""48e4ca1f-6d4e-4e75-b9b7-eb935ea52565"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""action"": ""Rotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd522382-ac9c-4f51-8641-615d27539a04"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
         m_Keyboard_Movement = m_Keyboard.FindAction("Movement", throwIfNotFound: true);
         m_Keyboard_Rotation = m_Keyboard.FindAction("Rotation", throwIfNotFound: true);
+        m_Keyboard_Shot = m_Keyboard.FindAction("Shot", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -183,12 +204,14 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
     private IKeyboardActions m_KeyboardActionsCallbackInterface;
     private readonly InputAction m_Keyboard_Movement;
     private readonly InputAction m_Keyboard_Rotation;
+    private readonly InputAction m_Keyboard_Shot;
     public struct KeyboardActions
     {
         private @InputSystem m_Wrapper;
         public KeyboardActions(@InputSystem wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Keyboard_Movement;
         public InputAction @Rotation => m_Wrapper.m_Keyboard_Rotation;
+        public InputAction @Shot => m_Wrapper.m_Keyboard_Shot;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -204,6 +227,9 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 @Rotation.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRotation;
                 @Rotation.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRotation;
                 @Rotation.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRotation;
+                @Shot.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShot;
+                @Shot.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShot;
+                @Shot.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShot;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -214,6 +240,9 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 @Rotation.started += instance.OnRotation;
                 @Rotation.performed += instance.OnRotation;
                 @Rotation.canceled += instance.OnRotation;
+                @Shot.started += instance.OnShot;
+                @Shot.performed += instance.OnShot;
+                @Shot.canceled += instance.OnShot;
             }
         }
     }
@@ -222,5 +251,6 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
+        void OnShot(InputAction.CallbackContext context);
     }
 }

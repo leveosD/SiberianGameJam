@@ -4,14 +4,14 @@ using UnityEngine.InputSystem;
 
 public class InputController : MonoBehaviour
 {
-    private CharacterController characterController;
+    private CharacterController _characterController;
+    private AnimationController _animatotionController;
     private InputSystem gameInput;
 
     private Vector2 input_direction;
     private Vector2 input_mouse_direction;
 
     private float delay = 1f;
-
     
     public static event Action PlayerDead;
 
@@ -22,12 +22,13 @@ public class InputController : MonoBehaviour
         gameInput = new InputSystem();
         gameInput.Enable();
         
-        characterController = GetComponent<CharacterController>();
+        _characterController = GetComponent<CharacterController>();
+        _animatotionController = GetComponent<AnimationController>();
     }
 
     private void OnEnable()
     {
-        //gameInput.Keyboard.Shoot.performed += Shoot;
+        gameInput.Keyboard.Shot.performed += Shoot;
         //gameInput.Keyboard.TouchPress.started += OnTouchPressStarted;
     }
 
@@ -53,7 +54,7 @@ public class InputController : MonoBehaviour
         Rotate();
         if (!isDesktop && delay <= 0)
         {
-            characterController.Shoot();
+            _characterController.Shoot();
             delay = 0.5f;
         }
     }
@@ -65,7 +66,7 @@ public class InputController : MonoBehaviour
 
     private void Move()
     {
-        characterController.Move(input_direction);
+        _characterController.Move(input_direction);
     }
 
     private void ReadRotation()
@@ -75,14 +76,14 @@ public class InputController : MonoBehaviour
 
     private void Rotate()
     { 
-        characterController.Rotate(input_mouse_direction);
+        _characterController.Rotate(input_mouse_direction);
     }
 
     private void Shoot(InputAction.CallbackContext obj)
     {
         if(delay <= 0)
         {
-            characterController.Shoot();
+            _characterController.Shoot();
             delay = 0.75f;
         }
     }
