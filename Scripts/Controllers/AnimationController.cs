@@ -18,4 +18,9 @@ public class AnimationController : MonoBehaviour
     {
         animator.Play("Attack");
     }
+
+    public void Dead()
+    {
+        animator.Play("Dead");
+    }
 }

@@ -10,6 +10,8 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private AnimationController _animationController;
 
+    private CharacterController _characterController;
+
     private float constY;
 
     public bool IsHunting
@@ -23,6 +25,8 @@ public class EnemyController : MonoBehaviour, IDamageable
         get;
         set;
     }
+
+    private bool isDead = false;
     
     private int health = 3;
 
@@ -33,13 +37,14 @@ public class EnemyController : MonoBehaviour, IDamageable
         _player = FindObjectOfType<InputController>().gameObject;
         _movementController = GetComponent<MovementController>();
         _animationController = GetComponent<AnimationController>();
+        _characterController = GetComponent<CharacterController>();
 
         constY = transform.position.y;
     }
     
     private void FixedUpdate()
     {
-        if(IsHunting && !IsAttacking) Move();
+        if(IsHunting && !IsAttacking && !isDead) Move();
         Rotate();
     }
 
@@ -72,11 +77,20 @@ public class EnemyController : MonoBehaviour, IDamageable
         }
 
         health -= damage;
+        Debug.Log("Health: " + health);
+        
+        if (health <= 0)
+        {
+            isDead = true;
+            constY = 0f;
+            _characterController.enabled = false;
+            _animationController.Dead();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !isDead)
         {
             IsAttacking = true;
             _animationController.Attack();

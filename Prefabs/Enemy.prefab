@@ -103,6 +103,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0
   mouseSensitivity: 4
+  damage: 0
+  targetTag: Player
 --- !u!114 &3647649612270647402
 MonoBehaviour:
   m_ObjectHideFlags: 0

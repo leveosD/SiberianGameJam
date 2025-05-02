@@ -8,6 +8,7 @@ public class MovementController : MonoBehaviour, IMovable
     [SerializeField] protected float mouseSensitivity;
 
     [SerializeField] private int damage;
+    [SerializeField] private string targetTag;
     
     delegate void FakeDestroy();
 
@@ -29,8 +30,6 @@ public class MovementController : MonoBehaviour, IMovable
         right.Normalize();
 
         Vector3 moveDirection =  forward * direction.y + right * direction.x;
-        if(gameObject.tag == "Enemy")
-            Debug.Log(moveDirection);
         _characterController.Move(moveDirection * (speed * Time.fixedDeltaTime));
     }
 
@@ -51,7 +50,7 @@ public class MovementController : MonoBehaviour, IMovable
         Debug.Log(col);
         if (col != null)
         {
-            if (col.CompareTag("Player"))
+            if (col.CompareTag(targetTag))
             {
                 col.gameObject.GetComponent<IDamageable>().TakeDamage(damage);
             }
