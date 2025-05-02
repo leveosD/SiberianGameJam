@@ -12,11 +12,10 @@ public class MusicTest : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         
         // Воспроизвести первый клип
-        audioSource.clip = clips[0];
-        audioSource.Play();
+        audioSource.PlayOneShot(clips[0]);
 
         // Запланировать проигрывание второго после окончания первого
-        Invoke(nameof(PlaySecondClip), 61);
+        Invoke(nameof(PlaySecondClip), 1.7f);
     }
 
     void PlaySecondClip()

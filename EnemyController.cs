@@ -1,8 +1,91 @@
+using System.Collections;
+using Interfaces;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IDamageable
 {
+    private GameObject _player;
+
+    private MovementController _movementController;
+
+    private AnimationController _animationController;
+
+    private float constY;
+
+    public bool IsHunting
+    {
+        get;
+        set;
+    }
+    
+    private bool IsAttacking
+    {
+        get;
+        set;
+    }
+    
+    private int health = 3;
+
+    private Vector3 playerVector;
+    
+    private void Start()
+    {
+        _player = FindObjectOfType<InputController>().gameObject;
+        _movementController = GetComponent<MovementController>();
+        _animationController = GetComponent<AnimationController>();
+
+        constY = transform.position.y;
+    }
+    
     private void FixedUpdate()
     {
+        if(IsHunting && !IsAttacking) Move();
+        Rotate();
+    }
+
+    private void Update()
+    {
+        playerVector = (_player.transform.position - this.transform.position).normalized; 
+    }
+
+    private void Move()
+    {
+        _movementController.Move(new Vector2(1, -1));
+        _animationController.Move();
+    }
+    
+    private void Rotate()
+    {
+        transform.forward = -playerVector;
+        //transform.localRotation = Quaternion.Euler(0, transform.localRotation.y, 0);
+        transform.position = new Vector3(transform.position.x, constY, transform.position.z);
+        //transform.localRotation = (-playerVector).;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Debug.Log("Enemy is taking damage");
+        
+        if (!IsHunting)
+        {
+            IsHunting = true;
+        }
+
+        health -= damage;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            IsAttacking = true;
+            _animationController.Attack();
+        }
+    }
+
+    private IEnumerator AttackDelay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        IsAttacking = false;
     }
 }

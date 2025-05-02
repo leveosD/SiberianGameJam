@@ -1,10 +1,11 @@
 using System;
+using Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputController : MonoBehaviour
+public class InputController : MonoBehaviour, IDamageable
 {
-    private CharacterController _characterController;
+    private MovementController _movementController;
     private AnimationController _animatotionController;
     private InputSystem gameInput;
 
@@ -12,6 +13,8 @@ public class InputController : MonoBehaviour
     private Vector2 input_mouse_direction;
 
     private float delay = 1f;
+
+    private int health = 10;
     
     public static event Action PlayerDead;
 
@@ -22,7 +25,7 @@ public class InputController : MonoBehaviour
         gameInput = new InputSystem();
         gameInput.Enable();
         
-        _characterController = GetComponent<CharacterController>();
+        _movementController = GetComponent<MovementController>();
         _animatotionController = GetComponent<AnimationController>();
     }
 
@@ -42,8 +45,6 @@ public class InputController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (delay > 0)
-            delay -= Time.deltaTime;
         ReadRotation();
         ReadMovement();
     }
@@ -52,21 +53,17 @@ public class InputController : MonoBehaviour
     {
         Move();
         Rotate();
-        if (!isDesktop && delay <= 0)
-        {
-            _characterController.Shoot();
-            delay = 0.5f;
-        }
     }
 
     private void ReadMovement()
     {
         input_direction = gameInput.Keyboard.Movement.ReadValue<Vector2>();
+        //Debug.Log(input_direction);
     }
 
     private void Move()
     {
-        _characterController.Move(input_direction);
+        _movementController.Move(input_direction);
     }
 
     private void ReadRotation()
@@ -76,16 +73,22 @@ public class InputController : MonoBehaviour
 
     private void Rotate()
     { 
-        _characterController.Rotate(input_mouse_direction);
+        _movementController.Rotate(input_mouse_direction);
     }
 
     private void Shoot(InputAction.CallbackContext obj)
     {
+        _movementController.Shoot();
         _animatotionController.Shoot();
     }
 
     public void FakeDestroy()
     {
         gameObject.SetActive(false);
+    }
+
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
     }
 }

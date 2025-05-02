@@ -8,4 +8,14 @@ public class AnimationController : MonoBehaviour
     {
         animator.Play("PistolShoot");
     }
+
+    public void Move()
+    {
+        animator.Play("Move");
+    }
+
+    public void Attack()
+    {
+        animator.Play("Attack");
+    }
 }
