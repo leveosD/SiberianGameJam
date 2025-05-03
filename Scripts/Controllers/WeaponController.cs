@@ -7,6 +7,7 @@ public class WeaponController : MonoBehaviour
 {
     [SerializeField] private List<Weapon> _weapons = new List<Weapon>();
     [SerializeField] private Animator animator;
+    [SerializeField] private BulletManager bulletManager;
 
     private SoundController _soundController;
 
@@ -50,7 +51,6 @@ public class WeaponController : MonoBehaviour
             
         if (_currentAmmo == 0)
         {
-            Debug.Log(_currentAmmo);
             animator.Play("EmptyClip");
             _soundController.PlayClip(4);
             return;
@@ -66,11 +66,12 @@ public class WeaponController : MonoBehaviour
         {
             if (col.CompareTag(targetTag))
             {
-                col.gameObject.GetComponent<IDamageable>().TakeDamage(_currentWeapon.Damage);
+                col.gameObject.GetComponentInParent<IDamageable>().TakeDamage(_currentWeapon.Damage);
             }
         }
 
         _currentAmmo -= 1;
+        bulletManager.Shot();
     }
 
     private IEnumerator ShotDelay()
@@ -83,5 +84,6 @@ public class WeaponController : MonoBehaviour
     {
         animator.Play("Reload");
         _currentAmmo = _currentWeapon.Ammo;
+        bulletManager.Reload();
     }
 }

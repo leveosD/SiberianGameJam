@@ -1,7 +1,7 @@
-using System;
 using System.Collections;
 using Interfaces;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour, IDamageable
 {
@@ -13,12 +13,18 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private SpriteRenderer _spriteRenderer;
 
+    private SoundController _soundController;
+
+    private BoxCollider _boxCollider;
+
     private float constY;
 
     [SerializeField] private bool _isHunting;
 
     private Vector2 _commonDir = new Vector2(0, -1);
     private Vector2 _direction;
+
+    private float _moanDelay;
 
     public bool IsHunting
     {
@@ -71,9 +77,14 @@ public class EnemyController : MonoBehaviour, IDamageable
         _areaChecker.Tag = "Player";
         Physics.IgnoreCollision(_areaChecker.BoxCollider, GetComponent<Collider>());
 
+        _soundController = GetComponentInChildren<SoundController>();
+        _boxCollider = GetComponent<BoxCollider>();
+        
         constY = 0.5f;
         _startPosition = transform.position;
         _health = maxHealth;
+
+        _moanDelay = Random.Range(5f, 12f);
     }
     
     private void FixedUpdate()
@@ -84,7 +95,23 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        _playerVector = (_player.transform.position - this.transform.position).normalized; 
+        _playerVector = (_player.transform.position - this.transform.position).normalized;
+        if (!_isDead && _moanDelay <= 0)
+        {
+            if (!IsHunting)
+            {
+                _soundController.PlayClip(Random.Range(4, 8));
+                _moanDelay = Random.Range(5f, 12f);
+            }
+            else
+            {
+                _soundController.PlayClip(Random.Range(8, 10));
+                _moanDelay = Random.Range(3f, 9f);
+            }
+        }
+        
+
+        _moanDelay -= Time.deltaTime;
     }
 
     private void Move()
@@ -112,13 +139,13 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
+        
         if (!IsHunting)
         {
             IsHunting = true;
         }
 
         _health -= damage;
-        Debug.Log("_health: " + _health);
         
         if (_health <= 0)
         {
@@ -126,6 +153,13 @@ public class EnemyController : MonoBehaviour, IDamageable
             constY = 0f;
             _animationController.Dead();
             _spriteRenderer.sortingOrder = -1;
+            _boxCollider.enabled = false;
+            _soundController.PlayClip(3);
+            transform.position = new Vector3(transform.position.x, -0.25f, transform.position.z);
+        }
+        else
+        {
+            _soundController.PlayClip(2);
         }
     }
 
@@ -136,6 +170,7 @@ public class EnemyController : MonoBehaviour, IDamageable
             _isPlayerNear = true;
             _animationController.Attack();
             StartCoroutine(AttackDelay());
+            _soundController.PlayClip(0);
         }
     }
     private void OnTriggerExit(Collider other)
@@ -148,10 +183,13 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private IEnumerator AttackDelay()
     {
-        yield return new WaitForSecondsRealtime(1.7f);
+        yield return new WaitForSecondsRealtime(0.3f);
+        _soundController.PlayClip(10);
+        yield return new WaitForSecondsRealtime(1.2f);
         if (_isPlayerNear)
         {
             _animationController.Attack();
+            _soundController.PlayClip(0);
             StartCoroutine(AttackDelay());
         }
     }
@@ -168,6 +206,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void OnPlayerDeath()
     {
+        _boxCollider.enabled = true;
         IsHunting = false;
         _animationController.IsMoving = false;
         _animationController.Idle();

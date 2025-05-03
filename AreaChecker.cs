@@ -4,6 +4,7 @@ using UnityEngine;
 public class AreaChecker : MonoBehaviour
 {
     private BoxCollider _boxCollider;
+    [SerializeField] private SoundController soundController;
 
     public BoxCollider BoxCollider
     {
@@ -31,9 +32,9 @@ public class AreaChecker : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Area checker: " + other.tag);
         if (other.CompareTag(Tag))
         {
+            soundController.PlayClip(1);
             var damageable = other.GetComponent<IDamageable>();
             damageable?.TakeDamage(damage);
         }
