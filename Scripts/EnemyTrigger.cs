@@ -13,7 +13,6 @@ public class EnemyTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.tag);
         if (other.CompareTag("Player"))
         {
             foreach (var enemy in _enemies)

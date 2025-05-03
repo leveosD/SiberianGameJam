@@ -3,20 +3,18 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour, IMovable
 {
-    private CharacterController _characterController;
+    //private CharacterController _characterController;
+    private Rigidbody _rigidbody;
+    
     [SerializeField] protected float speed;
     [SerializeField] protected float mouseSensitivity;
-
-    [SerializeField] private int damage;
-    [SerializeField] private string targetTag;
     
     delegate void FakeDestroy();
 
-    private FakeDestroy fakeDestroy;
-
     private void Awake()
     {
-        _characterController = GetComponent<CharacterController>();
+        _rigidbody = GetComponent<Rigidbody>();
+        //_characterController = GetComponent<CharacterController>();
     }
 
     public void Move(Vector2 direction)
@@ -30,31 +28,15 @@ public class MovementController : MonoBehaviour, IMovable
         right.Normalize();
 
         Vector3 moveDirection =  forward * direction.y + right * direction.x;
-        _characterController.Move(moveDirection * (speed * Time.fixedDeltaTime));
+        _rigidbody.velocity = moveDirection * (speed * Time.fixedDeltaTime);
+        _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0, _rigidbody.velocity.z);
+        //_characterController.Move(moveDirection * (speed * Time.fixedDeltaTime));
     }
 
     public void Rotate(Vector3 direction)
     {
-        if(direction == Vector3.zero)
-            return;
         float xRotation = direction.x * mouseSensitivity;
         transform.Rotate(new Vector3(0, xRotation, 0));
-    }
-
-    public void Shoot()
-    {
-        RaycastHit hit;
-        Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit);
-        Debug.Log(transform.position + " " + transform.forward);
-        var col = hit.collider;
-        Debug.Log(col);
-        if (col != null)
-        {
-            if (col.CompareTag(targetTag))
-            {
-                col.gameObject.GetComponent<IDamageable>().TakeDamage(damage);
-            }
-        }
     }
     
     public void MileAttack()

@@ -7,6 +7,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6426310458440965687}
     m_Modifications:
+    - target: {fileID: 1246622188936121912, guid: 625f4185ed5f7da4b8a4a6a0fc291485, type: 3}
+      propertyPath: maxHealth
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3975484406314321809, guid: 625f4185ed5f7da4b8a4a6a0fc291485, type: 3}
       propertyPath: m_Name
       value: BabkaPrefab
@@ -55,7 +59,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 77566079597329027, guid: 625f4185ed5f7da4b8a4a6a0fc291485, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 625f4185ed5f7da4b8a4a6a0fc291485, type: 3}
 --- !u!1001 &8140237412485730967
 PrefabInstance:

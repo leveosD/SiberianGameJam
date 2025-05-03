@@ -53,6 +53,15 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""7aaa9ae6-7e06-42bf-9cd6-3e9b4b0b31f6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""action"": ""Shot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a77bf78a-5ade-4e16-af60-54eb766588d1"",
+                    ""path"": ""<Keyboard>/#(R)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         m_Keyboard_Movement = m_Keyboard.FindAction("Movement", throwIfNotFound: true);
         m_Keyboard_Rotation = m_Keyboard.FindAction("Rotation", throwIfNotFound: true);
         m_Keyboard_Shot = m_Keyboard.FindAction("Shot", throwIfNotFound: true);
+        m_Keyboard_Reload = m_Keyboard.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -205,6 +226,7 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_Movement;
     private readonly InputAction m_Keyboard_Rotation;
     private readonly InputAction m_Keyboard_Shot;
+    private readonly InputAction m_Keyboard_Reload;
     public struct KeyboardActions
     {
         private @InputSystem m_Wrapper;
@@ -212,6 +234,7 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Keyboard_Movement;
         public InputAction @Rotation => m_Wrapper.m_Keyboard_Rotation;
         public InputAction @Shot => m_Wrapper.m_Keyboard_Shot;
+        public InputAction @Reload => m_Wrapper.m_Keyboard_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -230,6 +253,9 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 @Shot.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShot;
                 @Shot.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShot;
                 @Shot.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShot;
+                @Reload.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -243,6 +269,9 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 @Shot.started += instance.OnShot;
                 @Shot.performed += instance.OnShot;
                 @Shot.canceled += instance.OnShot;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -252,5 +281,6 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnRotation(InputAction.CallbackContext context);
         void OnShot(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

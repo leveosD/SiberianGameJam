@@ -7,6 +7,7 @@ public class InputController : MonoBehaviour, IDamageable
 {
     private MovementController _movementController;
     private AnimationController _animatotionController;
+    private WeaponController _weaponController;
     private InputSystem gameInput;
 
     private Vector2 input_direction;
@@ -14,11 +15,12 @@ public class InputController : MonoBehaviour, IDamageable
 
     private float delay = 1f;
 
-    private int health = 10;
+    [SerializeField] private int maxHealth;
+    private int health;
     
     public static event Action PlayerDead;
 
-    private bool isDesktop;
+    private Vector3 _startPosition;
     
     private void Awake()
     {
@@ -27,17 +29,24 @@ public class InputController : MonoBehaviour, IDamageable
         
         _movementController = GetComponent<MovementController>();
         _animatotionController = GetComponent<AnimationController>();
+        _weaponController = GetComponent<WeaponController>();
+
+        _startPosition = transform.position;
+
+        health = maxHealth;
     }
 
     private void OnEnable()
     {
         gameInput.Keyboard.Shot.performed += Shoot;
+        gameInput.Keyboard.Reload.performed += Reload;
         //gameInput.Keyboard.TouchPress.started += OnTouchPressStarted;
     }
 
     private void OnDisable()
     {
         gameInput.Keyboard.Shot.performed -= Shoot;
+        gameInput.Keyboard.Reload.performed -= Reload;
         //gameInput.Keyboard.Shoot.performed -= Shoot;
         //gameInput.Keyboard.TouchPress.performed -= OnTouchPressStarted;
     }
@@ -58,12 +67,28 @@ public class InputController : MonoBehaviour, IDamageable
     private void ReadMovement()
     {
         input_direction = gameInput.Keyboard.Movement.ReadValue<Vector2>();
+        /*if (input_direction == Vector2.zero)
+        {
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                input_direction.y += 1;
+            }if (Input.GetKeyDown(KeyCode.S))
+            {
+                input_direction.y -= 1;
+            }if (Input.GetKeyDown(KeyCode.A))
+            {
+                input_direction.y -= 1;
+            }if (Input.GetKeyDown(KeyCode.D))
+            {
+                input_direction.y += 1;
+            }   
+        }*/
         //Debug.Log(input_direction);
     }
 
     private void Move()
     {
-        Debug.Log(input_direction);
+        //Debug.Log(input_direction);
         _movementController.Move(input_direction);
     }
 
@@ -79,10 +104,15 @@ public class InputController : MonoBehaviour, IDamageable
 
     private void Shoot(InputAction.CallbackContext obj)
     {
-        _movementController.Shoot();
+        _weaponController.Shoot();
         _animatotionController.Shoot();
     }
 
+    private void Reload(InputAction.CallbackContext obj)
+    {
+        _weaponController.Reload();
+    }
+    
     public void FakeDestroy()
     {
         gameObject.SetActive(false);
@@ -90,7 +120,12 @@ public class InputController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Player is DAMAGED!");
         health -= damage;
+        if (health <= 0)
+        {
+            PlayerDead?.Invoke();
+            transform.position = _startPosition;
+            health = maxHealth;
+        }
     }
 }

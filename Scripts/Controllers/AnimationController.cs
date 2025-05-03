@@ -13,7 +13,7 @@ public class AnimationController : MonoBehaviour
     
     public void Shoot()
     {
-        animator.Play("PistolShoot");
+        animator.Play("Shoot");
     }
 
     public void Move()
@@ -23,12 +23,15 @@ public class AnimationController : MonoBehaviour
 
     public void Attack()
     {
-        Debug.Log("Attack");
         animator.Play("Attack");
     }
 
     public void Dead()
     {
         animator.Play("Dead");
+    }
+    public void Idle()
+    {
+        animator.Play("Idle");
     }
 }

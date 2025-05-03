@@ -44,8 +44,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.37, y: 0.5, z: 0.2}
-  m_Center: {x: 0.33, y: 0.12, z: 0}
+  m_Size: {x: 0.92, y: 0.5, z: 0.7}
+  m_Center: {x: -0.03, y: 0.12, z: -0.51}
 --- !u!114 &5111603495659964860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,6 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd4eca1ea9501b4d87144b458471cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 1
 --- !u!1001 &2581663995024111186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -67,16 +68,36 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1264660694288598153, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: speed
-      value: 2
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 1511005746415514051, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: m_Name
-      value: Babka
+      value: BabkaPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 2684745559531134208, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: da8c51c14d189b54aace89b3bdb09103, type: 2}
+    - target: {fileID: 3706496985230050951, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+      propertyPath: m_Size.x
+      value: 0.51
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706496985230050951, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+      propertyPath: m_Size.y
+      value: 1.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706496985230050951, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+      propertyPath: m_Size.z
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706496985230050951, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+      propertyPath: m_Center.x
+      value: -0.17
+      objectReference: {fileID: 0}
+    - target: {fileID: 3706496985230050951, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+      propertyPath: m_Center.y
+      value: -0.09
+      objectReference: {fileID: 0}
     - target: {fileID: 4993140641315606752, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: m_Size.x
       value: 1.28
@@ -97,6 +118,10 @@ PrefabInstance:
       propertyPath: animator
       value: 
       objectReference: {fileID: 473379772051417938}
+    - target: {fileID: 7585433376906407620, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8300441707432575767, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: m_RootOrder
       value: 0

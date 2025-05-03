@@ -1,12 +1,14 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
 public class AreaChecker : MonoBehaviour
 {
     private BoxCollider _boxCollider;
+
+    public BoxCollider BoxCollider
+    {
+        get => _boxCollider;
+    }
     
     public string Tag
     {
@@ -24,10 +26,12 @@ public class AreaChecker : MonoBehaviour
     private void Awake()
     {
         _boxCollider = GetComponent<BoxCollider>();
+        _boxCollider.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Area checker: " + other.tag);
         if (other.CompareTag(Tag))
         {
             var damageable = other.GetComponent<IDamageable>();

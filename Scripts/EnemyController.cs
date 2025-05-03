@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Interfaces;
 using UnityEngine;
@@ -10,13 +11,14 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private AnimationController _animationController;
 
-    private CharacterController _characterController;
-
     private SpriteRenderer _spriteRenderer;
 
     private float constY;
 
-    private bool _isHunting;
+    [SerializeField] private bool _isHunting;
+
+    private Vector2 _commonDir = new Vector2(0, -1);
+    private Vector2 _direction;
 
     public bool IsHunting
     {
@@ -41,28 +43,42 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private bool _isDead = false;
     
-    private int _health = 3;
+    [SerializeField] private int maxHealth;
+    private int _health;
 
     private Vector3 _playerVector;
 
     private AreaChecker _areaChecker;
     
+    private Vector3 _startPosition;
+
+    private void OnEnable()
+    {
+        InputController.PlayerDead += OnPlayerDeath;
+    }
+    private void OnDisable()
+    {
+        InputController.PlayerDead -= OnPlayerDeath;
+    }
+
     private void Start()
     {
         _player = FindObjectOfType<InputController>().gameObject;
         _movementController = GetComponent<MovementController>();
         _animationController = GetComponent<AnimationController>();
-        _characterController = GetComponent<CharacterController>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _areaChecker = GetComponentInChildren<AreaChecker>();
         _areaChecker.Tag = "Player";
+        Physics.IgnoreCollision(_areaChecker.BoxCollider, GetComponent<Collider>());
 
         constY = 0.5f;
+        _startPosition = transform.position;
+        _health = maxHealth;
     }
     
     private void FixedUpdate()
     {
-        if(IsHunting && !IsAttacking && !_isDead) Move();
+        Move();
         Rotate();
     }
 
@@ -73,21 +89,29 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void Move()
     {
-        _movementController.Move(new Vector2(1, -1));
+        if (IsHunting && !IsAttacking && !_isDead && !_isPlayerNear)
+        {
+            /*_direction = _commonDir;
+        else
+            _direction = Vector2.zero;*/
+            _movementController.Move(_commonDir);
+        }
+        else
+        {
+            _movementController.Move(Vector2.zero);
+        }
     }
     
     private void Rotate()
     {
         transform.forward = -_playerVector;
         //transform.localRotation = Quaternion.Euler(0, transform.localRotation.y, 0);
-        transform.position = new Vector3(transform.position.x, constY, transform.position.z);
+        //transform.position = new Vector3(transform.position.x, constY, transform.position.z);
         //transform.localRotation = (-_playerVector).;
     }
 
     public void TakeDamage(int damage)
     {
-        Debug.Log("Enemy is taking damage");
-        
         if (!IsHunting)
         {
             IsHunting = true;
@@ -100,7 +124,6 @@ public class EnemyController : MonoBehaviour, IDamageable
         {
             _isDead = true;
             constY = 0f;
-            _characterController.enabled = false;
             _animationController.Dead();
             _spriteRenderer.sortingOrder = -1;
         }
@@ -125,7 +148,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private IEnumerator AttackDelay()
     {
-        yield return new WaitForSecondsRealtime(2);
+        yield return new WaitForSecondsRealtime(1.7f);
         if (_isPlayerNear)
         {
             _animationController.Attack();
@@ -141,5 +164,18 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void CheckerOff()
     {
         _areaChecker.IsEnabled = false;
+    }
+
+    private void OnPlayerDeath()
+    {
+        IsHunting = false;
+        _animationController.IsMoving = false;
+        _animationController.Idle();
+        IsAttacking = false;
+        _isDead = false;
+        transform.position = _startPosition;
+        _health = maxHealth;
+        _spriteRenderer.sortingOrder = 0;
+        transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 }
