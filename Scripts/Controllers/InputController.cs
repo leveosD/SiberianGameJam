@@ -63,6 +63,7 @@ public class InputController : MonoBehaviour, IDamageable
 
     private void Move()
     {
+        Debug.Log(input_direction);
         _movementController.Move(input_direction);
     }
 
