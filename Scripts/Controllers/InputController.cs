@@ -89,6 +89,7 @@ public class InputController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("Player is DAMAGED!");
         health -= damage;
     }
 }

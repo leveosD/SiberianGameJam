@@ -1,5 +1,63 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3834879420982210039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3419736107900930195}
+  - component: {fileID: 2039663595698367536}
+  - component: {fileID: 5111603495659964860}
+  m_Layer: 0
+  m_Name: AttackAreaChecker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3419736107900930195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834879420982210039}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5828500663189435717}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2039663595698367536
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834879420982210039}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.37, y: 0.5, z: 0.2}
+  m_Center: {x: 0.33, y: 0.12, z: 0}
+--- !u!114 &5111603495659964860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3834879420982210039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8fd4eca1ea9501b4d87144b458471cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2581663995024111186
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30,7 +88,7 @@ PrefabInstance:
     - target: {fileID: 4993140641315606752, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 692848286, guid: f7195510d4dd5b04ebe542de577e8f0b, type: 3}
+      objectReference: {fileID: -1156291863, guid: a577252f8ad5afc4da7c765715f0d3c8, type: 3}
     - target: {fileID: 4993140641315606752, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
       propertyPath: m_WasSpriteAssigned
       value: 1
@@ -109,3 +167,8 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &5828500663189435717 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8300441707432575767, guid: 71e9ad9b628757e4390e145962c19fcc, type: 3}
+  m_PrefabInstance: {fileID: 2581663995024111186}
+  m_PrefabAsset: {fileID: 0}

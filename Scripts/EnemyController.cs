@@ -14,23 +14,36 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private float constY;
 
+    private bool _isHunting;
+
     public bool IsHunting
     {
-        get;
-        set;
+        get => _isHunting;
+        set
+        {
+            if (_isDead && value)
+                return;
+            _isHunting = value;
+            _animationController.IsMoving = value;
+            _animationController.Move();
+        }
     }
-    
-    private bool IsAttacking
+
+    public bool IsAttacking
     {
         get;
         set;
     }
 
-    private bool isDead = false;
-    
-    private int health = 3;
+    [SerializeField] private bool _isPlayerNear = false;
 
-    private Vector3 playerVector;
+    private bool _isDead = false;
+    
+    private int _health = 3;
+
+    private Vector3 _playerVector;
+
+    private AreaChecker _areaChecker;
     
     private void Start()
     {
@@ -38,33 +51,34 @@ public class EnemyController : MonoBehaviour, IDamageable
         _movementController = GetComponent<MovementController>();
         _animationController = GetComponent<AnimationController>();
         _characterController = GetComponent<CharacterController>();
+        _areaChecker = GetComponentInChildren<AreaChecker>();
+        _areaChecker.Tag = "Player";
 
         constY = transform.position.y;
     }
     
     private void FixedUpdate()
     {
-        if(IsHunting && !IsAttacking && !isDead) Move();
+        if(IsHunting && !IsAttacking && !_isDead) Move();
         Rotate();
     }
 
     private void Update()
     {
-        playerVector = (_player.transform.position - this.transform.position).normalized; 
+        _playerVector = (_player.transform.position - this.transform.position).normalized; 
     }
 
     private void Move()
     {
         _movementController.Move(new Vector2(1, -1));
-        _animationController.Move();
     }
     
     private void Rotate()
     {
-        transform.forward = -playerVector;
+        transform.forward = -_playerVector;
         //transform.localRotation = Quaternion.Euler(0, transform.localRotation.y, 0);
         transform.position = new Vector3(transform.position.x, constY, transform.position.z);
-        //transform.localRotation = (-playerVector).;
+        //transform.localRotation = (-_playerVector).;
     }
 
     public void TakeDamage(int damage)
@@ -76,13 +90,13 @@ public class EnemyController : MonoBehaviour, IDamageable
             IsHunting = true;
         }
 
-        health -= damage;
-        Debug.Log("Health: " + health);
+        _health -= damage;
+        Debug.Log("_health: " + _health);
         
-        if (health <= 0)
+        if (_health <= 0)
         {
-            isDead = true;
-            constY = 0f;
+            _isDead = true;
+            constY = -0.5f;
             _characterController.enabled = false;
             _animationController.Dead();
         }
@@ -90,16 +104,38 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !isDead)
+        if (other.CompareTag("Player") && !_isDead)
         {
-            IsAttacking = true;
+            _isPlayerNear = true;
             _animationController.Attack();
+            StartCoroutine(AttackDelay());
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && !_isDead)
+        {
+            _isPlayerNear = false;
         }
     }
 
     private IEnumerator AttackDelay()
     {
-        yield return new WaitForSeconds(1.5f);
-        IsAttacking = false;
+        yield return new WaitForSecondsRealtime(2);
+        if (_isPlayerNear)
+        {
+            _animationController.Attack();
+            StartCoroutine(AttackDelay());
+        }
+    }
+
+    public void CheckerOn()
+    {
+        _areaChecker.IsEnabled = true;
+    }
+    
+    public void CheckerOff()
+    {
+        _areaChecker.IsEnabled = false;
     }
 }
