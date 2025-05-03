@@ -12,6 +12,8 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private CharacterController _characterController;
 
+    private SpriteRenderer _spriteRenderer;
+
     private float constY;
 
     private bool _isHunting;
@@ -51,10 +53,11 @@ public class EnemyController : MonoBehaviour, IDamageable
         _movementController = GetComponent<MovementController>();
         _animationController = GetComponent<AnimationController>();
         _characterController = GetComponent<CharacterController>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
         _areaChecker = GetComponentInChildren<AreaChecker>();
         _areaChecker.Tag = "Player";
 
-        constY = transform.position.y;
+        constY = 0.5f;
     }
     
     private void FixedUpdate()
@@ -96,9 +99,10 @@ public class EnemyController : MonoBehaviour, IDamageable
         if (_health <= 0)
         {
             _isDead = true;
-            constY = -0.5f;
+            constY = 0f;
             _characterController.enabled = false;
             _animationController.Dead();
+            _spriteRenderer.sortingOrder = -1;
         }
     }
 
