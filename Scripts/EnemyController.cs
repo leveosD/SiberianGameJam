@@ -49,6 +49,11 @@ public class EnemyController : MonoBehaviour, IDamageable
     protected bool _isPlayerNear = false;
 
     protected bool _isDead = false;
+
+    public bool IsDead
+    {
+        get => _isDead;
+    }
     
     [SerializeField] protected int maxHealth;
     protected int _health;
@@ -78,7 +83,6 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         _soundController = GetComponentInChildren<SoundController>();
         _collider = GetComponents<BoxCollider>()[0];
-        _trigger = GetComponents<BoxCollider>()[1];
         
         constY = 0.5f;
         _startPosition = transform.position;
@@ -98,7 +102,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         EnemyBehaviour();    
     }
 
-    private void Update()
+    protected void Update()
     {
         _playerVector = (_player.transform.position - this.transform.position).normalized;
         if (!_isDead && _moanDelay <= 0)
@@ -120,6 +124,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void Move()
     {
+        Debug.Log(IsHunting + " " + !IsAttacking + " " + !_isDead + " " + !_isPlayerNear);
         if (IsHunting && !IsAttacking && !_isDead && !_isPlayerNear)
         {
             /*_direction = _commonDir;

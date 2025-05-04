@@ -1,6 +1,4 @@
-using UnityEditor.Animations;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "Weapon", menuName = "MyAssets/Weapon")]
 public class Weapon : ScriptableObject
@@ -8,7 +6,7 @@ public class Weapon : ScriptableObject
     [SerializeField] private int damage;
     [SerializeField] private int ammo;
     [SerializeField] private float delay;
-    [SerializeField] private AnimatorController animator;
+    [SerializeField] private Animator animator;
     
     public int Damage
     {
@@ -25,7 +23,7 @@ public class Weapon : ScriptableObject
         get => delay;
     }
     
-    public AnimatorController Anim
+    public Animator Anim
     {
         get => animator;
     }

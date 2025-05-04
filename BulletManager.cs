@@ -23,7 +23,7 @@ public class BulletManager: MonoBehaviour
         int i = 0;
         var defPos = _slots[0].rectTransform.position;
         var addX = new Vector3(100, 0, 0);
-        foreach (var slot in _slots)
+        /*foreach (var slot in _slots)
         {
             slot.rectTransform.position = defPos + addX *  i;
             i += 1;
@@ -34,7 +34,7 @@ public class BulletManager: MonoBehaviour
         {
             bullet.rectTransform.position = defPos + addX * i;
             i += 1;
-        }
+        }*/
     }
 
     public void Shot()

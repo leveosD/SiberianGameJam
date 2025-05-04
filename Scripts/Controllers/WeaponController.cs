@@ -22,7 +22,7 @@ public class WeaponController : MonoBehaviour
         set
         {
             _currentWeapon = value;
-            animator.runtimeAnimatorController = value.Anim;
+            animator = value.Anim;
         }
     }
 
@@ -82,7 +82,10 @@ public class WeaponController : MonoBehaviour
 
     public void Reload()
     {
+        if(_currentAmmo == _currentWeapon.Ammo)
+            return;
         animator.Play("Reload");
+        _soundController.PlayClip(5);
         _currentAmmo = _currentWeapon.Ammo;
         bulletManager.Reload();
     }

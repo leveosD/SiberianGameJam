@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
@@ -7,10 +8,15 @@ using UnityEngine;
 public class Wave : MonoBehaviour
 {
     [SerializeField] private float speed;
+    [SerializeField] private int damage;
 
     private List<RectTransform> _circles;
 
+    private AudioSource _audioSource;
+
     private int _angle;
+
+    private float _lifeTime = 3.5f;
 
     private int Angle
     {
@@ -26,6 +32,7 @@ public class Wave : MonoBehaviour
     private void Awake()
     {
         _circles = GetComponentsInChildren<RectTransform>().ToList();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void FixedUpdate()
@@ -39,13 +46,28 @@ public class Wave : MonoBehaviour
         {
             circle.localRotation = Quaternion.Euler(new Vector3(0, 0, Angle++));
         }
+
+        _lifeTime -= Time.deltaTime;
+        if(_lifeTime <= 0)
+            Destroy(this.gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        string tag = other.tag;
+        bool deadEnemy = true;
+        if (tag == "Enemy")
+            deadEnemy = other.gameObject.GetComponent<EnemyController>().IsDead;
+        if (tag == "Player" || !deadEnemy)
         {
-            other.gameObject.GetComponent<IDamageable>().TakeDamage(3);
+            _audioSource.Play();
+            other.gameObject.GetComponent<IDamageable>().TakeDamage(damage);
         }
+    }
+
+    IEnumerator PlayDamageSound()
+    {
+        yield return new WaitForSeconds(1f);
+        Destroy(this.gameObject);
     }
 }
