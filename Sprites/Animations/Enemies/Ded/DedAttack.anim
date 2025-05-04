@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DeadBabka
+  m_Name: DedAttack
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,7 +20,9 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300000, guid: bde3f3872ade08142bed7c31b119d0b7, type: 3}
+      value: {fileID: 876360675, guid: 63327aa725790ee40a6f735a7af1d10a, type: 3}
+    - time: 0.6666667
+      value: {fileID: 876360675, guid: 63327aa725790ee40a6f735a7af1d10a, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -40,13 +42,14 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300000, guid: bde3f3872ade08142bed7c31b119d0b7, type: 3}
+    - {fileID: 876360675, guid: 63327aa725790ee40a6f735a7af1d10a, type: 3}
+    - {fileID: 876360675, guid: 63327aa725790ee40a6f735a7af1d10a, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.016666668
+    m_StopTime: 0.68333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0

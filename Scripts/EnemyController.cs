@@ -5,21 +5,22 @@ using Random = UnityEngine.Random;
 
 public class EnemyController : MonoBehaviour, IDamageable
 {
-    private GameObject _player;
+    protected GameObject _player;
 
     private MovementController _movementController;
 
-    private AnimationController _animationController;
+    protected AnimationController _animationController;
 
     private SpriteRenderer _spriteRenderer;
 
-    private SoundController _soundController;
+    protected SoundController _soundController;
 
-    private BoxCollider _boxCollider;
+    private BoxCollider _collider;
+    private BoxCollider _trigger;
 
     private float constY;
 
-    [SerializeField] private bool _isHunting;
+    private bool _isHunting;
 
     private Vector2 _commonDir = new Vector2(0, -1);
     private Vector2 _direction;
@@ -45,18 +46,19 @@ public class EnemyController : MonoBehaviour, IDamageable
         set;
     }
 
-    [SerializeField] private bool _isPlayerNear = false;
+    protected bool _isPlayerNear = false;
 
-    private bool _isDead = false;
+    protected bool _isDead = false;
     
-    [SerializeField] private int maxHealth;
-    private int _health;
+    [SerializeField] protected int maxHealth;
+    protected int _health;
 
     private Vector3 _playerVector;
-
-    private AreaChecker _areaChecker;
     
     private Vector3 _startPosition;
+
+    [SerializeField] private Vector2 huntingMoan;
+    [SerializeField] private Vector2 commonMoan;
 
     private void OnEnable()
     {
@@ -67,18 +69,16 @@ public class EnemyController : MonoBehaviour, IDamageable
         InputController.PlayerDead -= OnPlayerDeath;
     }
 
-    private void Start()
+    protected void Start()
     {
         _player = FindObjectOfType<InputController>().gameObject;
         _movementController = GetComponent<MovementController>();
         _animationController = GetComponent<AnimationController>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _areaChecker = GetComponentInChildren<AreaChecker>();
-        _areaChecker.Tag = "Player";
-        Physics.IgnoreCollision(_areaChecker.BoxCollider, GetComponent<Collider>());
 
         _soundController = GetComponentInChildren<SoundController>();
-        _boxCollider = GetComponent<BoxCollider>();
+        _collider = GetComponents<BoxCollider>()[0];
+        _trigger = GetComponents<BoxCollider>()[1];
         
         constY = 0.5f;
         _startPosition = transform.position;
@@ -87,10 +87,15 @@ public class EnemyController : MonoBehaviour, IDamageable
         _moanDelay = Random.Range(5f, 12f);
     }
     
+    protected virtual void EnemyBehaviour()
+    {
+        
+    }
     private void FixedUpdate()
     {
         Move();
         Rotate();
+        EnemyBehaviour();    
     }
 
     private void Update()
@@ -100,16 +105,15 @@ public class EnemyController : MonoBehaviour, IDamageable
         {
             if (!IsHunting)
             {
-                _soundController.PlayClip(Random.Range(4, 8));
+                _soundController.PlayClip(Random.Range((int)commonMoan.x, (int)commonMoan.y));
                 _moanDelay = Random.Range(5f, 12f);
             }
             else
             {
-                _soundController.PlayClip(Random.Range(8, 10));
+                _soundController.PlayClip(Random.Range((int)huntingMoan.x, (int)huntingMoan.y));
                 _moanDelay = Random.Range(3f, 9f);
             }
         }
-        
 
         _moanDelay -= Time.deltaTime;
     }
@@ -139,7 +143,6 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        
         if (!IsHunting)
         {
             IsHunting = true;
@@ -152,10 +155,9 @@ public class EnemyController : MonoBehaviour, IDamageable
             _isDead = true;
             constY = 0f;
             _animationController.Dead();
-            _spriteRenderer.sortingOrder = -1;
-            _boxCollider.enabled = false;
+            _collider.enabled = false;
             _soundController.PlayClip(3);
-            transform.position = new Vector3(transform.position.x, -0.25f, transform.position.z);
+            StartCoroutine(DownBody());
         }
         else
         {
@@ -163,50 +165,21 @@ public class EnemyController : MonoBehaviour, IDamageable
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private IEnumerator DownBody()
     {
-        if (other.CompareTag("Player") && !_isDead)
-        {
-            _isPlayerNear = true;
-            _animationController.Attack();
-            StartCoroutine(AttackDelay());
-            _soundController.PlayClip(0);
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player") && !_isDead)
-        {
-            _isPlayerNear = false;
-        }
+        yield return new WaitForSeconds(0.5f);
+        _spriteRenderer.sortingOrder = -1;
+        transform.position = new Vector3(transform.position.x, -0.25f, transform.position.z);
     }
 
-    private IEnumerator AttackDelay()
+    protected virtual IEnumerator AttackDelay()
     {
-        yield return new WaitForSecondsRealtime(0.3f);
-        _soundController.PlayClip(10);
-        yield return new WaitForSecondsRealtime(1.2f);
-        if (_isPlayerNear)
-        {
-            _animationController.Attack();
-            _soundController.PlayClip(0);
-            StartCoroutine(AttackDelay());
-        }
-    }
-
-    public void CheckerOn()
-    {
-        _areaChecker.IsEnabled = true;
-    }
-    
-    public void CheckerOff()
-    {
-        _areaChecker.IsEnabled = false;
+        yield return null;
     }
 
     private void OnPlayerDeath()
     {
-        _boxCollider.enabled = true;
+        _collider.enabled = true;
         IsHunting = false;
         _animationController.IsMoving = false;
         _animationController.Idle();

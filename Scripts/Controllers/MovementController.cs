@@ -8,12 +8,15 @@ public class MovementController : MonoBehaviour, IMovable
     
     [SerializeField] protected float speed;
     [SerializeField] protected float mouseSensitivity;
+
+    private float _angle;
     
     delegate void FakeDestroy();
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _angle = transform.localRotation.y;
         //_characterController = GetComponent<CharacterController>();
     }
 
@@ -36,7 +39,9 @@ public class MovementController : MonoBehaviour, IMovable
     public void Rotate(Vector3 direction)
     {
         float xRotation = direction.x * mouseSensitivity;
-        transform.Rotate(new Vector3(0, xRotation, 0));
+        _angle += xRotation;
+        transform.localRotation = Quaternion.Euler(new Vector3(0, _angle, 0));
+        //transform.Rotate(new Vector3(0, xRotation, 0));
     }
     
     public void MileAttack()

@@ -105,7 +105,7 @@ public class InputController : MonoBehaviour, IDamageable
     private void Shoot(InputAction.CallbackContext obj)
     {
         _weaponController.Shoot();
-        _animatotionController.Shoot();
+        //_animatotionController.Shoot();
     }
 
     private void Reload(InputAction.CallbackContext obj)

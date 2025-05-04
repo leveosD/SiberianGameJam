@@ -48,7 +48,7 @@ public class WeaponController : MonoBehaviour
 
         _isDelayed = true;
         StartCoroutine(ShotDelay());
-            
+        
         if (_currentAmmo == 0)
         {
             animator.Play("EmptyClip");
@@ -58,6 +58,9 @@ public class WeaponController : MonoBehaviour
         
         animator.Play("Shot");
         _soundController.PlayClip(0);
+        
+        _currentAmmo -= 1;
+        bulletManager.Shot();
         
         RaycastHit hit;
         Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit);
@@ -69,9 +72,6 @@ public class WeaponController : MonoBehaviour
                 col.gameObject.GetComponentInParent<IDamageable>().TakeDamage(_currentWeapon.Damage);
             }
         }
-
-        _currentAmmo -= 1;
-        bulletManager.Shot();
     }
 
     private IEnumerator ShotDelay()

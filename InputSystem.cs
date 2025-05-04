@@ -79,10 +79,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""up"",
                     ""id"": ""9481ceb7-534c-43b5-8ebe-6ebc0c36bb78"",
-                    ""path"": ""<Keyboard>/#(W)"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""MyScheme"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -90,10 +90,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""down"",
                     ""id"": ""3d87a1a8-f0a6-4447-9fda-2568170792f3"",
-                    ""path"": ""<Keyboard>/#(S)"",
+                    ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""MyScheme"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -101,10 +101,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""right"",
                     ""id"": ""82d95f47-b3c0-48a4-903d-527e1b35ab53"",
-                    ""path"": ""<Keyboard>/#(D)"",
+                    ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""MyScheme"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -112,7 +112,7 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 {
                     ""name"": ""left"",
                     ""id"": ""47cb0e52-05cf-49b4-99e9-594b3125c8cd"",
-                    ""path"": ""<Keyboard>/#(A)"",
+                    ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -137,7 +137,7 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""MyScheme"",
                     ""action"": ""Shot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -145,10 +145,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a77bf78a-5ade-4e16-af60-54eb766588d1"",
-                    ""path"": ""<Keyboard>/#(R)"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""MyScheme"",
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -156,7 +156,24 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""MyScheme"",
+            ""bindingGroup"": ""MyScheme"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Keyboard
         m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
@@ -276,6 +293,15 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         }
     }
     public KeyboardActions @Keyboard => new KeyboardActions(this);
+    private int m_MySchemeSchemeIndex = -1;
+    public InputControlScheme MySchemeScheme
+    {
+        get
+        {
+            if (m_MySchemeSchemeIndex == -1) m_MySchemeSchemeIndex = asset.FindControlSchemeIndex("MyScheme");
+            return asset.controlSchemes[m_MySchemeSchemeIndex];
+        }
+    }
     public interface IKeyboardActions
     {
         void OnMovement(InputAction.CallbackContext context);

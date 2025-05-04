@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class AnimationController : MonoBehaviour
@@ -6,6 +7,12 @@ public class AnimationController : MonoBehaviour
     private static readonly int Moving = Animator.StringToHash("Moving");
     [SerializeField] private Animator animator;
 
+    private void Awake()
+    {
+        if(animator == null)
+            animator = GetComponent<Animator>();
+    }
+
     public bool IsMoving
     {
         set => animator.SetBool(Moving, value);
@@ -13,7 +20,7 @@ public class AnimationController : MonoBehaviour
     
     public void Shoot()
     {
-        animator.Play("Shoot");
+        animator.Play("Shot");
     }
 
     public void Move()
