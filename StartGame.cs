@@ -1,5 +1,3 @@
-
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -12,6 +10,7 @@ public class StartGame : MonoBehaviour
     public VideoPlayer videoPlayer;
     [SerializeField] private Image im1;
     [SerializeField] private Image im2;
+    [SerializeField] private GameObject music;
     
     private void Awake()
     {
@@ -31,6 +30,7 @@ public class StartGame : MonoBehaviour
         im1.enabled = false;
         button.enabled = false;
         button.image.enabled = false;
+        music.SetActive(false);
         yield return new WaitForSecondsRealtime(10.5f);
         SceneManager.LoadScene(1);
         
