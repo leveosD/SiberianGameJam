@@ -62,6 +62,42 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pistol"",
+                    ""type"": ""Button"",
+                    ""id"": ""d803d12b-f3df-4d5e-ace7-9914c4e2c3d3"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shotgun"",
+                    ""type"": ""Button"",
+                    ""id"": ""c8d12840-d6e5-4ed3-a68e-950a282e6d01"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""a5185e84-fca7-4291-b777-20df272df0b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Restart"",
+                    ""type"": ""Button"",
+                    ""id"": ""7c68e75b-d7d9-45bd-b2da-f1d01efc4d5f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +188,50 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68b87339-f5d5-46d3-ac5e-36d26af0b87e"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MyScheme"",
+                    ""action"": ""Pistol"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e697eb9-cbe3-4c42-bb59-dc93ba46ee1f"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MyScheme"",
+                    ""action"": ""Shotgun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ee47046-7ab6-4c17-ad64-668c0f1cf039"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MyScheme"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0d874b49-e7aa-48f4-bf6f-d87c6f99b186"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""MyScheme"",
+                    ""action"": ""Restart"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -181,6 +261,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         m_Keyboard_Rotation = m_Keyboard.FindAction("Rotation", throwIfNotFound: true);
         m_Keyboard_Shot = m_Keyboard.FindAction("Shot", throwIfNotFound: true);
         m_Keyboard_Reload = m_Keyboard.FindAction("Reload", throwIfNotFound: true);
+        m_Keyboard_Pistol = m_Keyboard.FindAction("Pistol", throwIfNotFound: true);
+        m_Keyboard_Shotgun = m_Keyboard.FindAction("Shotgun", throwIfNotFound: true);
+        m_Keyboard_Pause = m_Keyboard.FindAction("Pause", throwIfNotFound: true);
+        m_Keyboard_Restart = m_Keyboard.FindAction("Restart", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -244,6 +328,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_Rotation;
     private readonly InputAction m_Keyboard_Shot;
     private readonly InputAction m_Keyboard_Reload;
+    private readonly InputAction m_Keyboard_Pistol;
+    private readonly InputAction m_Keyboard_Shotgun;
+    private readonly InputAction m_Keyboard_Pause;
+    private readonly InputAction m_Keyboard_Restart;
     public struct KeyboardActions
     {
         private @InputSystem m_Wrapper;
@@ -252,6 +340,10 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         public InputAction @Rotation => m_Wrapper.m_Keyboard_Rotation;
         public InputAction @Shot => m_Wrapper.m_Keyboard_Shot;
         public InputAction @Reload => m_Wrapper.m_Keyboard_Reload;
+        public InputAction @Pistol => m_Wrapper.m_Keyboard_Pistol;
+        public InputAction @Shotgun => m_Wrapper.m_Keyboard_Shotgun;
+        public InputAction @Pause => m_Wrapper.m_Keyboard_Pause;
+        public InputAction @Restart => m_Wrapper.m_Keyboard_Restart;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -273,6 +365,18 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 @Reload.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnReload;
                 @Reload.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnReload;
                 @Reload.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnReload;
+                @Pistol.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnPistol;
+                @Pistol.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnPistol;
+                @Pistol.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnPistol;
+                @Shotgun.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShotgun;
+                @Shotgun.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShotgun;
+                @Shotgun.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnShotgun;
+                @Pause.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnPause;
+                @Restart.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRestart;
+                @Restart.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRestart;
+                @Restart.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnRestart;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -289,6 +393,18 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
                 @Reload.started += instance.OnReload;
                 @Reload.performed += instance.OnReload;
                 @Reload.canceled += instance.OnReload;
+                @Pistol.started += instance.OnPistol;
+                @Pistol.performed += instance.OnPistol;
+                @Pistol.canceled += instance.OnPistol;
+                @Shotgun.started += instance.OnShotgun;
+                @Shotgun.performed += instance.OnShotgun;
+                @Shotgun.canceled += instance.OnShotgun;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
+                @Restart.started += instance.OnRestart;
+                @Restart.performed += instance.OnRestart;
+                @Restart.canceled += instance.OnRestart;
             }
         }
     }
@@ -308,5 +424,9 @@ public partial class @InputSystem : IInputActionCollection2, IDisposable
         void OnRotation(InputAction.CallbackContext context);
         void OnShot(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
+        void OnPistol(InputAction.CallbackContext context);
+        void OnShotgun(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnRestart(InputAction.CallbackContext context);
     }
 }
