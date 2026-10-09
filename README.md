@@ -1,6 +1,6 @@
 # KOLOBOK (Siberian GameJam 2025)
 
-A first-person action game developed within one week as part of Siberian GameJam. Developed in a team of three: myself as the programmer, along with a sound designer and an artist.
+A first-person action game initially developed within one week as part of Siberian GameJam and subsequently polished and refined over the course of two months. Developed in a team of three: myself as the programmer, along with a sound designer and an artist.
 
 Gameplay Trailer: [Watch on YouTube](https://youtu.be/EmPOPHG4WN0)
 
